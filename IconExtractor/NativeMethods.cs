@@ -33,19 +33,19 @@ namespace TsudaKageyu
 {
     internal static class NativeMethods
     {
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         [SuppressUnmanagedCodeSecurity]
         public static extern IntPtr LoadLibraryEx(string lpFileName, IntPtr hFile, uint dwFlags);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         [SuppressUnmanagedCodeSecurity]
-        public static extern IntPtr FreeLibrary(IntPtr hModule);
+        public static extern bool FreeLibrary(IntPtr hModule);
 
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         [SuppressUnmanagedCodeSecurity]
         public static extern bool EnumResourceNames(IntPtr hModule, IntPtr lpszType, ENUMRESNAMEPROC lpEnumFunc, IntPtr lParam);
 
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         [SuppressUnmanagedCodeSecurity]
         public static extern IntPtr FindResource(IntPtr hModule, IntPtr lpName, IntPtr lpType);
 
@@ -62,7 +62,7 @@ namespace TsudaKageyu
         public static extern uint SizeofResource(IntPtr hModule, IntPtr hResInfo);
     }
 
-    [UnmanagedFunctionPointer(CallingConvention.Winapi, SetLastError = true, CharSet = CharSet.Auto)]
+    [UnmanagedFunctionPointer(CallingConvention.Winapi, SetLastError = true, CharSet = CharSet.Unicode)]
     [SuppressUnmanagedCodeSecurity]
     internal delegate bool ENUMRESNAMEPROC(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, IntPtr lParam);
 }

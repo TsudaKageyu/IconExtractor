@@ -87,7 +87,7 @@ namespace TsudaKageyu
         /// <summary>
         /// Converts an Icon to a GDI+ Bitmap preserving the transparent area.
         /// </summary>
-        /// <param name="icon">An System.Drawing.Icon to be coverted.</param>
+        /// <param name="icon">An System.Drawing.Icon to be converted.</param>
         /// <returns>A System.Drawing.Bitmap Object.</returns>
         public static Bitmap ToBitmap(Icon icon)
         {
@@ -96,14 +96,11 @@ namespace TsudaKageyu
 
             // Quick workaround: Create an .ico file in memory, then load it as a Bitmap.
 
-            Bitmap bmp;
             using (var ms = new MemoryStream())
             {
                 icon.Save(ms);
-                bmp = (Bitmap)Image.FromStream(ms);
+                return (Bitmap)Image.FromStream(ms);
             }
-
-            return bmp;
         }
 
         /// <summary>
