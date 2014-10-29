@@ -87,15 +87,7 @@ namespace TsudaKageyu
         ////////////////////////////////////////////////////////////////////////
         // Fields
 
-        /// <summary>
-        /// Resource data of the type RT_GROUP_ICON, or icon headers.
-        /// </summary>
-        private List<byte[]> iconDirs = new List<byte[]>();
-
-        /// <summary>
-        /// Resource data of the type RT_ICON, or icon pictures.
-        /// </summary>
-        private Dictionary<ushort, byte[]> iconPics = new Dictionary<ushort, byte[]>();
+        private List<byte[]> iconData = null;   // Binary data of each icon. 
 
         ////////////////////////////////////////////////////////////////////////
         // Public properties
@@ -105,7 +97,7 @@ namespace TsudaKageyu
         /// </summary>
         public int Count
         {
-            get { return iconDirs.Count; }
+            get { return iconData.Count; }
         }
 
         /// <summary>
@@ -128,82 +120,9 @@ namespace TsudaKageyu
             if (index < 0 || Count <= index)
                 throw new ArgumentOutOfRangeException("index");
 
-            using (var writer = new BinaryWriter(new MemoryStream()))
+            using (var ms = new MemoryStream(iconData[index]))
             {
-                var dir = iconDirs[index];
-
-                // Copy GRPICONDIR to ICONDIR.
-
-                // #pragma pack( push )
-                // #pragma pack( 2 )
-                // typedef struct
-                // {
-                //    WORD            idReserved;   // Reserved (must be 0)
-                //    WORD            idType;       // Resource type (1 for icons)
-                //    WORD            idCount;      // How many images?
-                // } GRPICONDIR, *LPGRPICONDIR;
-                // #pragma pack( pop )
-
-                // typedef struct
-                // {
-                //     WORD           idReserved;   // Reserved (must be 0)
-                //     WORD           idType;       // Resource Type (1 for icons)
-                //     WORD           idCount;      // How many images?
-                // } ICONDIR, *LPICONDIR;
-
-                writer.Write(dir, 0, 6);    // Just copy as they are identical.
-
-                int count = BitConverter.ToUInt16(dir, 4);  // GRPICONDIR.idCount
-                int offset = 6 + 16 * count;                // sizeof(ICONDIR) + sizeof(ICONDIRENTRY) * count
-                byte[][] pics = new byte[count][];
-
-                for (int i = 0; i < count; ++i)
-                {
-                    // Copy GRPICONDIRENTRY to ICONDIRENTRY.
-
-                    // #pragma pack( push )
-                    // #pragma pack( 2 )
-                    // typedef struct
-                    // {
-                    //    BYTE   bWidth;           // Width, in pixels, of the image
-                    //    BYTE   bHeight;          // Height, in pixels, of the image
-                    //    BYTE   bColorCount;      // Number of colors in image (0 if >=8bpp)
-                    //    BYTE   bReserved;        // Reserved
-                    //    WORD   wPlanes;          // Color Planes
-                    //    WORD   wBitCount;        // Bits per pixel
-                    //    DWORD  dwBytesInRes;     // how many bytes in this resource?
-                    //    WORD   nID;              // the ID
-                    // } GRPICONDIRENTRY, *LPGRPICONDIRENTRY;
-                    // #pragma pack( pop )
-
-                    // typedef struct
-                    // {
-                    //     BYTE   bWidth;          // Width, in pixels, of the image
-                    //     BYTE   bHeight;         // Height, in pixels, of the image
-                    //     BYTE   bColorCount;     // Number of colors in image (0 if >=8bpp)
-                    //     BYTE   bReserved;       // Reserved ( must be 0)
-                    //     WORD   wPlanes;         // Color Planes
-                    //     WORD   wBitCount;       // Bits per pixel
-                    //     DWORD  dwBytesInRes;    // How many bytes in this resource?
-                    //     DWORD  dwImageOffset;   // Where in the file is this image?
-                    // } ICONDIRENTRY, *LPICONDIRENTRY;
-
-                    writer.Write(dir, 6 + 14 * i, 12);  // First 12bytes are identical.
-                    writer.Write(offset);               // Write offset instead of ID.
-
-                    ushort id = BitConverter.ToUInt16(dir, 6 + 14 * i + 12);    // GRPICONDIRENTRY.nID
-                    pics[i] = iconPics[id];
-
-                    offset += pics[i].Length;
-                }
-
-                // Copy pictures.
-
-                for (int i = 0; i < count; ++i)
-                    writer.Write(pics[i], 0, pics[i].Length);
-
-                writer.BaseStream.Seek(0, SeekOrigin.Begin);
-                return new Icon(writer.BaseStream);
+                return new Icon(ms);
             }
         }
 
@@ -303,6 +222,11 @@ namespace TsudaKageyu
             if (fileName == null)
                 throw new ArgumentNullException("fileName");
 
+            // Collect resource data from the file.
+
+            var iconDirs = new List<byte[]>();
+            var iconPics = new Dictionary<int, byte[]>();
+
             IntPtr hModule = IntPtr.Zero;
             try
             {
@@ -326,6 +250,47 @@ namespace TsudaKageyu
             {
                 if (hModule != IntPtr.Zero)
                     NativeMethods.FreeLibrary(hModule);
+            }
+
+            // Build .ico files in memory out of the resource data. 
+
+            iconData = new List<byte[]>();
+
+            foreach (var dir in iconDirs)
+            {
+                using (var writer = new BinaryWriter(new MemoryStream()))
+                {
+                    // Refer the following URL for the data structures:
+                    // http://msdn.microsoft.com/en-us/library/ms997538.aspx
+
+                    // Copy GRPICONDIR to ICONDIR.
+
+                    writer.Write(dir, 0, 6);
+
+                    int count = BitConverter.ToUInt16(dir, 4);  // GRPICONDIR.idCount
+                    int offset = 6 + 16 * count;                // sizeof(ICONDIR) + sizeof(ICONDIRENTRY) * count
+                    byte[][] pics = new byte[count][];
+
+                    for (int i = 0; i < count; ++i)
+                    {
+                        // Copy GRPICONDIRENTRY to ICONDIRENTRY.
+
+                        writer.Write(dir, 6 + 14 * i, 12);  // First 12bytes are identical.
+                        writer.Write(offset);               // Write offset instead of ID.
+
+                        ushort id = BitConverter.ToUInt16(dir, 6 + 14 * i + 12);    // GRPICONDIRENTRY.nID
+                        pics[i] = iconPics[id];
+
+                        offset += pics[i].Length;
+                    }
+
+                    // Copy pictures.
+
+                    for (int i = 0; i < count; ++i)
+                        writer.Write(pics[i], 0, pics[i].Length);
+
+                    iconData.Add(((MemoryStream)writer.BaseStream).ToArray());
+                }
             }
         }
 
