@@ -19,18 +19,6 @@ namespace SampleApp
             InitializeComponent();
         }
 
-        private int GetIconBitDepth(Icon icon)
-        {
-            if (icon == null)
-                throw new ArgumentNullException("icon");
-
-            using (var stream = new MemoryStream())
-            {
-                icon.Save(stream);
-                return BitConverter.ToInt16(stream.ToArray(), 12);
-            }
-        }
-
         private void ClearAllIcons()
         {
             foreach (var item in lvwIcons.Items)
@@ -68,7 +56,7 @@ namespace SampleApp
                         icon = extractor.GetIcon(index);
                     }
 
-                    splitIcons = IconExtractor.SplitIcon(icon);
+                    splitIcons = IconUtil.Split(icon);
                 }
                 catch (Exception ex)
                 {
@@ -88,7 +76,7 @@ namespace SampleApp
                 {
                     var item = new IconListViewItem();
                     item.ToolTipText = String.Format(
-                        "{0} x {1}, {2}bits", i.Width, i.Height, GetIconBitDepth(i));
+                        "{0} x {1}, {2}bits", i.Width, i.Height, IconUtil.GetBitDepth(i));
                     item.Icon = i;
 
                     lvwIcons.Items.Add(item);
@@ -128,7 +116,7 @@ namespace SampleApp
             e.Graphics.CompositingQuality = CompositingQuality.HighQuality;
             e.Graphics.Clip = new Region(e.Bounds);
 
-            using (var bmp = IconExtractor.IconToBitmap(item.Icon))
+            using (var bmp = IconUtil.ToBitmap(item.Icon))
             {
                 e.Graphics.DrawImage(bmp, dstRect, srcRect, GraphicsUnit.Pixel);
             }
