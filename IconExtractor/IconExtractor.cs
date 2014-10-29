@@ -54,13 +54,13 @@ namespace TsudaKageyu
         ////////////////////////////////////////////////////////////////////////
         // Fields
 
-        private List<byte[]> iconData = null;   // Binary data of each icon. 
+        private List<byte[]> iconData = null;   // Binary data of each icon.
 
         ////////////////////////////////////////////////////////////////////////
         // Public properties
 
         /// <summary>
-        /// Gets the full path of the associated file. 
+        /// Gets the full path of the associated file.
         /// </summary>
         public string FileName
         {
@@ -130,7 +130,7 @@ namespace TsudaKageyu
 
                 FileName = GetFileName(hModule);
 
-                // Enumerate the icon resource and build .ico files in memory. 
+                // Enumerate the icon resource and build .ico files in memory.
 
                 iconData = new List<byte[]>();
 
