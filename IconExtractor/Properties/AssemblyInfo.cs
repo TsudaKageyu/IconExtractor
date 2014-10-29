@@ -5,14 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("IconExtractor")]
-[assembly: AssemblyDescription("Icon extractor library for .NET.")]
-[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyTitle("IconExtractor.dll")]
+[assembly: AssemblyDescription("IconExtractor.dll")]
 [assembly: AssemblyCompany("Tsuda Kageyu")]
-[assembly: AssemblyProduct("IconExtractor")]
+[assembly: AssemblyProduct("IconExtractor/IconUtil Library for .NET")]
 [assembly: AssemblyCopyright("Copyright © 2014 Tsuda Kageyu. All rights reserved")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
