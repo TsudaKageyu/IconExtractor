@@ -54,7 +54,7 @@ namespace TsudaKageyu
         ////////////////////////////////////////////////////////////////////////
         // Fields
 
-        private List<byte[]> iconData = null;   // Binary data of each icon.
+        private byte[][] iconData = null;   // Binary data of each icon.
 
         ////////////////////////////////////////////////////////////////////////
         // Public properties
@@ -73,7 +73,7 @@ namespace TsudaKageyu
         /// </summary>
         public int Count
         {
-            get { return iconData.Count; }
+            get { return iconData.Length; }
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace TsudaKageyu
 
                 // Enumerate the icon resource and build .ico files in memory.
 
-                iconData = new List<byte[]>();
+                var tmpData = new List<byte[]>();
 
                 ENUMRESNAMEPROC callback = (h, t, name, l) =>
                 {
@@ -177,12 +177,14 @@ namespace TsudaKageyu
                         for (int i = 0; i < count; ++i)
                             writer.Write(pics[i], 0, pics[i].Length);
 
-                        iconData.Add(((MemoryStream)writer.BaseStream).ToArray());
+                        tmpData.Add(((MemoryStream)writer.BaseStream).ToArray());
                     }
 
                     return true;
                 };
                 NativeMethods.EnumResourceNames(hModule, RT_GROUP_ICON, callback, IntPtr.Zero);
+
+                iconData = tmpData.ToArray();
             }
             finally
             {
