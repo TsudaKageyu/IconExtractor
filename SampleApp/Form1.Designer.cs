@@ -41,7 +41,7 @@
             this.txtFileName.Location = new System.Drawing.Point(110, 12);
             this.txtFileName.Name = "txtFileName";
             this.txtFileName.ReadOnly = true;
-            this.txtFileName.Size = new System.Drawing.Size(321, 19);
+            this.txtFileName.Size = new System.Drawing.Size(325, 19);
             this.txtFileName.TabIndex = 1;
             // 
             // btnSelectIcon
@@ -62,9 +62,9 @@
             this.lvwIcons.Location = new System.Drawing.Point(12, 37);
             this.lvwIcons.Name = "lvwIcons";
             this.lvwIcons.OwnerDraw = true;
-            this.lvwIcons.Size = new System.Drawing.Size(419, 379);
+            this.lvwIcons.Size = new System.Drawing.Size(423, 396);
             this.lvwIcons.TabIndex = 2;
-            this.lvwIcons.TileSize = new System.Drawing.Size(128, 128);
+            this.lvwIcons.TileSize = new System.Drawing.Size(132, 130);
             this.lvwIcons.UseCompatibleStateImageBehavior = false;
             this.lvwIcons.View = System.Windows.Forms.View.Tile;
             this.lvwIcons.DrawItem += new System.Windows.Forms.DrawListViewItemEventHandler(this.lvwIcons_DrawItem);
@@ -73,7 +73,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(443, 428);
+            this.ClientSize = new System.Drawing.Size(447, 445);
             this.Controls.Add(this.lvwIcons);
             this.Controls.Add(this.btnSelectIcon);
             this.Controls.Add(this.txtFileName);

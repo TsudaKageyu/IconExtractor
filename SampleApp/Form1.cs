@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
 using TsudaKageyu;
@@ -12,8 +13,6 @@ namespace SampleApp
         {
             public Icon Icon { get; set; }
         }
-
-        private static readonly Padding TilePadding = new Padding(2, 1, 2, 1);
 
         public Form1()
         {
@@ -108,11 +107,31 @@ namespace SampleApp
 
             e.DrawBackground();
 
-            int x = e.Bounds.X + (e.Bounds.Width - item.Icon.Width) / 2;
-            int y = e.Bounds.Y + (e.Bounds.Height - item.Icon.Height) / 2;
-            var iconRect = new Rectangle(x, y, item.Icon.Width, item.Icon.Height);
+            int w, h;
+            if (item.Icon.Width <= 128 && item.Icon.Height <= 128)
+            {
+                w = item.Icon.Width;
+                h = item.Icon.Height;
+            }
+            else
+            {
+                w = 128;
+                h = 128;
+            }
+
+            int x = e.Bounds.X + (e.Bounds.Width - w) / 2;
+            int y = e.Bounds.Y + (e.Bounds.Height - h) / 2;
+            var dstRect = new Rectangle(x, y, w, h);
+            var srcRect = new Rectangle(Point.Empty, item.Icon.Size);
+
+            e.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            e.Graphics.CompositingQuality = CompositingQuality.HighQuality;
             e.Graphics.Clip = new Region(e.Bounds);
-            e.Graphics.DrawIcon(item.Icon, iconRect);
+
+            using (var bmp = IconExtractor.IconToBitmap(item.Icon))
+            {
+                e.Graphics.DrawImage(bmp, dstRect, srcRect, GraphicsUnit.Pixel);
+            }
 
             var textRect = new Rectangle(
                 e.Bounds.Left, e.Bounds.Bottom - Font.Height - 4,
