@@ -87,13 +87,22 @@ namespace TsudaKageyu
         ////////////////////////////////////////////////////////////////////////
         // Fields
 
+        /// <summary>
+        /// Resource data of the type RT_GROUP_ICON, or icon headers.
+        /// </summary>
         private List<byte[]> iconDirs = new List<byte[]>();
 
+        /// <summary>
+        /// Resource data of the type RT_ICON, or icon pictures.
+        /// </summary>
         private Dictionary<ushort, byte[]> iconPics = new Dictionary<ushort, byte[]>();
 
         ////////////////////////////////////////////////////////////////////////
         // Public properties
 
+        /// <summary>
+        /// Count of the icons in the file.
+        /// </summary>
         public int Count
         {
             get { return iconDirs.Count; }
@@ -108,6 +117,12 @@ namespace TsudaKageyu
             Initialize(fileName);
         }
 
+        /// <summary>
+        /// Extracts an icon from the file.
+        /// </summary>
+        /// <param name="index">Zero based index of the icon to be extracted.</param>
+        /// <returns>A System.Drawing.Icon object.</returns>
+        /// <remarks>Always returns new copy of the Icon. It should be disposed by the user.</remarks>
         public Icon GetIcon(int index)
         {
             if (index < 0 || Count <= index)
@@ -192,6 +207,11 @@ namespace TsudaKageyu
             }
         }
 
+        /// <summary>
+        /// Extracts all the icons from the file.
+        /// </summary>
+        /// <returns>An array of System.Drawing.Icon objects.</returns>
+        /// <remarks>Always returns new copies of the Icons. They should be disposed by the user.</remarks>
         public Icon[] GetAllIcons()
         {
             var icons = new List<Icon>();
@@ -201,6 +221,12 @@ namespace TsudaKageyu
             return icons.ToArray();
         }
 
+        /// <summary>
+        /// Split an Icon consists of multiple icons into an array of Icon each 
+        /// consists of single icons.
+        /// </summary>
+        /// <param name="icon">A System.Drawing.Icon to be split.</param>
+        /// <returns>An array of System.Drawing.Icon.</returns>
         public static Icon[] SplitIcon(Icon icon)
         {
             if (icon == null)
@@ -250,6 +276,11 @@ namespace TsudaKageyu
             return splitIcons.ToArray();
         }
 
+        /// <summary>
+        /// Converts an Icon to a GDI+ Bitmap preserving the transparent area.
+        /// </summary>
+        /// <param name="icon">An System.Drawing.Icon to be coverted.</param>
+        /// <returns>A System.Drawing.Bitmap Object.</returns>
         public static Bitmap IconToBitmap(Icon icon)
         {
             if (icon == null)
