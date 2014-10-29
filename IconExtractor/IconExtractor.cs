@@ -31,6 +31,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace TsudaKageyu
 {
@@ -48,6 +49,8 @@ namespace TsudaKageyu
         private readonly static IntPtr RT_ICON = (IntPtr)3;
         private readonly static IntPtr RT_GROUP_ICON = (IntPtr)14;
 
+        private const int MAX_PATH = 260;
+
         ////////////////////////////////////////////////////////////////////////
         // Fields
 
@@ -57,7 +60,16 @@ namespace TsudaKageyu
         // Public properties
 
         /// <summary>
-        /// Count of the icons in the file.
+        /// Gets the full path of the associated file. 
+        /// </summary>
+        public string FileName
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the count of the icons in the associated file.
         /// </summary>
         public int Count
         {
@@ -109,14 +121,14 @@ namespace TsudaKageyu
             if (fileName == null)
                 throw new ArgumentNullException("fileName");
 
-            // Collect resource data from the file.
-
             var iconDirs = new List<byte[]>();
             var iconPics = new Dictionary<int, byte[]>();
 
             IntPtr hModule = IntPtr.Zero;
             try
             {
+                // Collect resource data from the file.
+
                 hModule = NativeMethods.LoadLibraryEx(fileName, IntPtr.Zero, LOAD_LIBRARY_AS_DATAFILE);
                 if (hModule == IntPtr.Zero)
                     throw new Win32Exception();
@@ -132,6 +144,8 @@ namespace TsudaKageyu
                 };
                 NativeMethods.EnumResourceNames(hModule, RT_GROUP_ICON, callback, IntPtr.Zero);
                 NativeMethods.EnumResourceNames(hModule, RT_ICON, callback, IntPtr.Zero);
+
+                FileName = GetFileName(hModule);
             }
             finally
             {
@@ -156,7 +170,7 @@ namespace TsudaKageyu
 
                     int count = BitConverter.ToUInt16(dir, 4);  // GRPICONDIR.idCount
                     int offset = 6 + 16 * count;                // sizeof(ICONDIR) + sizeof(ICONDIRENTRY) * count
-                    byte[][] pics = new byte[count][];
+                    var pics = new byte[count][];
 
                     for (int i = 0; i < count; ++i)
                     {
@@ -203,6 +217,41 @@ namespace TsudaKageyu
             Marshal.Copy(pResData, buf, 0, buf.Length);
 
             return buf;
+        }
+
+        private string GetFileName(IntPtr hModule)
+        {
+            // Get the file name in the format like:
+            // "\\Device\\HarddiskVolume2\\Windows\\System32\\shell32.dll"
+
+            string fileName;
+            {
+                var buf = new StringBuilder(MAX_PATH);
+                int len = NativeMethods.GetMappedFileName(
+                    NativeMethods.GetCurrentProcess(), hModule, buf, buf.Capacity);
+                if (len == 0)
+                    throw new Win32Exception();
+
+                fileName = buf.ToString();
+            }
+
+            // Convert the device name to drive name like:
+            // "C:\\Windows\\System32\\shell32.dll"
+
+            for (char c = 'A'; c <= 'Z'; ++c)
+            {
+                var drive = c + ":";
+                var buf = new StringBuilder(MAX_PATH);
+                int len = NativeMethods.QueryDosDevice(drive, buf, buf.Capacity);
+                if (len == 0)
+                    continue;
+
+                var devPath = buf.ToString();
+                if (fileName.StartsWith(devPath))
+                    return (drive + fileName.Substring(devPath.Length));
+            }
+
+            return fileName;
         }
     }
 }
