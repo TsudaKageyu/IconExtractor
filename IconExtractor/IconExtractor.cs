@@ -121,17 +121,19 @@ namespace TsudaKageyu
             if (fileName == null)
                 throw new ArgumentNullException("fileName");
 
+            // Collect resource data from the file.
+
             var iconDirs = new List<byte[]>();
             var iconPics = new Dictionary<int, byte[]>();
 
             IntPtr hModule = IntPtr.Zero;
             try
             {
-                // Collect resource data from the file.
-
                 hModule = NativeMethods.LoadLibraryEx(fileName, IntPtr.Zero, LOAD_LIBRARY_AS_DATAFILE);
                 if (hModule == IntPtr.Zero)
                     throw new Win32Exception();
+
+                FileName = GetFileName(hModule);
 
                 ENUMRESNAMEPROC callback = (hMod, type, name, lparam) =>
                 {
@@ -144,8 +146,6 @@ namespace TsudaKageyu
                 };
                 NativeMethods.EnumResourceNames(hModule, RT_GROUP_ICON, callback, IntPtr.Zero);
                 NativeMethods.EnumResourceNames(hModule, RT_ICON, callback, IntPtr.Zero);
-
-                FileName = GetFileName(hModule);
             }
             finally
             {
@@ -197,6 +197,8 @@ namespace TsudaKageyu
 
         private byte[] GetDataFromResource(IntPtr hModule, IntPtr type, IntPtr name)
         {
+            // Load the binary data from the specified resource.
+
             IntPtr hResInfo = NativeMethods.FindResource(hModule, name, type);
             if (hResInfo == IntPtr.Zero)
                 throw new Win32Exception();
@@ -221,6 +223,9 @@ namespace TsudaKageyu
 
         private string GetFileName(IntPtr hModule)
         {
+            // Alternative to GetModuleFileName() for the module loaded with
+            // LOAD_LIBRARY_AS_DATAFILE option.
+
             // Get the file name in the format like:
             // "\\Device\\HarddiskVolume2\\Windows\\System32\\shell32.dll"
 

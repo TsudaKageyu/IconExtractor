@@ -113,6 +113,8 @@ namespace TsudaKageyu
             if (icon == null)
                 throw new ArgumentNullException("icon");
 
+            // Create an .ico file in memory, then read the header.
+
             var data = GetIconData(icon);
 
             int count = BitConverter.ToInt16(data, 4);
