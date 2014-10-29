@@ -136,19 +136,27 @@ namespace TsudaKageyu
 
                 ENUMRESNAMEPROC callback = (h, t, name, l) =>
                 {
+                    // Refer the following URL for the data structures used here:
+                    // http://msdn.microsoft.com/en-us/library/ms997538.aspx
+
+                    // RT_GROUP_ICON resource consists of a GRPICONDIR and GRPICONDIRENTRY's.
+
                     var dir = GetDataFromResource(hModule, RT_GROUP_ICON, name);
 
-                    using (var writer = new BinaryWriter(new MemoryStream()))
-                    {
-                        // Refer the following URL for the data structures:
-                        // http://msdn.microsoft.com/en-us/library/ms997538.aspx
+                    // Calculate the size of an entire .icon file.
 
+                    int count = BitConverter.ToUInt16(dir, 4);  // GRPICONDIR.idCount
+                    int len = 6 + 16 * count;   // sizeof(ICONDIR) + sizeof(ICONDIRENTRY) * count
+                    for (int i = 0; i < count; ++i)
+                        len += BitConverter.ToInt32(dir, 6 + 14 * i + 8);   // GRPICONDIRENTRY.dwBytesInRes
+
+                    using (var writer = new BinaryWriter(new MemoryStream(len)))
+                    {
                         // Copy GRPICONDIR to ICONDIR.
 
                         writer.Write(dir, 0, 6);
 
-                        int count = BitConverter.ToUInt16(dir, 4);  // GRPICONDIR.idCount
-                        int offset = 6 + 16 * count;                // sizeof(ICONDIR) + sizeof(ICONDIRENTRY) * count
+                        int offset = 6 + 16 * count;    // sizeof(ICONDIR) + sizeof(ICONDIRENTRY) * count
                         var pics = new byte[count][];
 
                         for (int i = 0; i < count; ++i)
