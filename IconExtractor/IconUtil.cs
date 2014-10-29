@@ -35,7 +35,7 @@ namespace TsudaKageyu
     public static class IconUtil
     {
         /// <summary>
-        /// Split an Icon consists of multiple icons into an array of Icon each 
+        /// Split an Icon consists of multiple icons into an array of Icon each
         /// consists of single icons.
         /// </summary>
         /// <param name="icon">A System.Drawing.Icon to be split.</param>
@@ -55,7 +55,8 @@ namespace TsudaKageyu
 
                 for (int i = 0; i < count; i++)
                 {
-                    using (var writer = new BinaryWriter(new MemoryStream()))
+                    int len = 6 + 16 + BitConverter.ToInt32(data, 6 + 16 * i + 12);
+                    using (var writer = new BinaryWriter(new MemoryStream(len)))
                     {
                         // Copy ICONDIR and set idCount to 1.
 
