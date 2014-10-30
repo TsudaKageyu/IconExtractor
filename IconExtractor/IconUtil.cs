@@ -47,37 +47,37 @@ namespace TsudaKageyu
 
             // Create an .ico file in memory, then split it into separate icons.
 
-            var data = GetIconData(icon);
+            var src = GetIconData(icon);
 
             var splitIcons = new List<Icon>();
             {
-                int count = BitConverter.ToUInt16(data, 4);
+                int count = BitConverter.ToUInt16(src, 4);
 
                 for (int i = 0; i < count; i++)
                 {
-                    int len = 6 + 16 + BitConverter.ToInt32(data, 6 + 16 * i + 12);
-                    using (var writer = new BinaryWriter(new MemoryStream(len)))
+                    int length = BitConverter.ToInt32(src, 6 + 16 * i + 8);    // ICONDIRENTRY.dwBytesInRes
+                    int offset = BitConverter.ToInt32(src, 6 + 16 * i + 12);   // ICONDIRENTRY.dwImageOffset
+
+                    using (var dst = new BinaryWriter(new MemoryStream(6 + 16 + length)))
                     {
                         // Copy ICONDIR and set idCount to 1.
 
-                        writer.Write(data, 0, 4);
-                        writer.Write((short)1);
+                        dst.Write(src, 0, 4);
+                        dst.Write((short)1);
 
                         // Copy ICONDIRENTRY and set dwImageOffset to 22.
 
-                        writer.Write(data, 6 + 16 * i, 12);
-                        writer.Write(22);
+                        dst.Write(src, 6 + 16 * i, 12); // ICONDIRENTRY except dwImageOffset
+                        dst.Write(22);                   // ICONDIRENTRY.dwImageOffset
 
                         // Copy a picture.
 
-                        int size = BitConverter.ToInt32(data, 6 + 16 * i + 8);
-                        int offset = BitConverter.ToInt32(data, 6 + 16 * i + 12);
-                        writer.Write(data, offset, size);
+                        dst.Write(src, offset, length);
 
                         // Create an icon from the in-memory file.
 
-                        writer.BaseStream.Seek(0, SeekOrigin.Begin);
-                        splitIcons.Add(new Icon(writer.BaseStream));
+                        dst.BaseStream.Seek(0, SeekOrigin.Begin);
+                        splitIcons.Add(new Icon(dst.BaseStream));
                     }
                 }
             }
@@ -109,7 +109,7 @@ namespace TsudaKageyu
         /// </summary>
         /// <param name="icon">An System.Drawing.Icon object.</param>
         /// <returns>The biggest bit depth of the icons.</returns>
-        public static int GetBitDepth(Icon icon)
+        public static int GetBitCount(Icon icon)
         {
             if (icon == null)
                 throw new ArgumentNullException("icon");
@@ -122,7 +122,7 @@ namespace TsudaKageyu
             int bitDepth = 0;
             for (int i =0; i < count; ++i)
             {
-                int depth = BitConverter.ToUInt16(data, 6 + 16 * i + 6);
+                int depth = BitConverter.ToUInt16(data, 6 + 16 * i + 6);    // ICONDIRENTRY.wBitCount
                 if (depth > bitDepth)
                     bitDepth = depth;
             }

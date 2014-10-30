@@ -76,7 +76,7 @@ namespace SampleApp
                 {
                     var item = new IconListViewItem();
                     item.ToolTipText = String.Format(
-                        "{0} x {1}, {2}bits", i.Width, i.Height, IconUtil.GetBitDepth(i));
+                        "{0}x{1}, {2}bits", i.Width, i.Height, IconUtil.GetBitCount(i));
                     item.Icon = i;
 
                     lvwIcons.Items.Add(item);

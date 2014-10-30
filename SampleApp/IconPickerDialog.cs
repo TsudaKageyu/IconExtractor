@@ -33,12 +33,6 @@ namespace SampleApp
             set;
         }
 
-        public IconPickerDialog()
-        {
-            FileName = null;
-            IconIndex = 0;
-        }
-
         protected override bool RunDialog(IntPtr hwndOwner)
         {
             var buf = new StringBuilder(FileName, MAX_PATH);

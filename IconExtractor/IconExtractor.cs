@@ -96,6 +96,8 @@ namespace TsudaKageyu
             if (index < 0 || Count <= index)
                 throw new ArgumentOutOfRangeException("index");
 
+            // Create an Icon based on a .ico file in memory.
+
             using (var ms = new MemoryStream(iconData[index]))
             {
                 return new Icon(ms);
@@ -146,38 +148,40 @@ namespace TsudaKageyu
                     // Calculate the size of an entire .icon file.
 
                     int count = BitConverter.ToUInt16(dir, 4);  // GRPICONDIR.idCount
-                    int len = 6 + 16 * count;   // sizeof(ICONDIR) + sizeof(ICONDIRENTRY) * count
+                    int len = 6 + 16 * count;                   // sizeof(ICONDIR) + sizeof(ICONDIRENTRY) * count
                     for (int i = 0; i < count; ++i)
                         len += BitConverter.ToInt32(dir, 6 + 14 * i + 8);   // GRPICONDIRENTRY.dwBytesInRes
 
-                    using (var writer = new BinaryWriter(new MemoryStream(len)))
+                    using (var dst = new BinaryWriter(new MemoryStream(len)))
                     {
                         // Copy GRPICONDIR to ICONDIR.
 
-                        writer.Write(dir, 0, 6);
+                        dst.Write(dir, 0, 6);
 
-                        int offset = 6 + 16 * count;    // sizeof(ICONDIR) + sizeof(ICONDIRENTRY) * count
-                        var pics = new byte[count][];
+                        int picOffset = 6 + 16 * count; // sizeof(ICONDIR) + sizeof(ICONDIRENTRY) * count
 
                         for (int i = 0; i < count; ++i)
                         {
                             // Copy GRPICONDIRENTRY to ICONDIRENTRY.
 
-                            writer.Write(dir, 6 + 14 * i, 12);  // First 12bytes are identical.
-                            writer.Write(offset);               // Write offset instead of ID.
+                            dst.Seek(6 + 16 * i, SeekOrigin.Begin);
+
+                            dst.Write(dir, 6 + 14 * i, 12);  // First 12bytes are identical.
+                            dst.Write(picOffset);               // Write offset instead of ID.
+
+                            // Copy a picture.
+
+                            dst.Seek(picOffset, SeekOrigin.Begin);
 
                             ushort id = BitConverter.ToUInt16(dir, 6 + 14 * i + 12);    // GRPICONDIRENTRY.nID
-                            pics[i] = GetDataFromResource(hModule, RT_ICON, (IntPtr)id);
+                            var pic = GetDataFromResource(hModule, RT_ICON, (IntPtr)id);
 
-                            offset += pics[i].Length;
+                            dst.Write(pic, 0, pic.Length);
+
+                            picOffset += pic.Length;
                         }
 
-                        // Copy pictures.
-
-                        for (int i = 0; i < count; ++i)
-                            writer.Write(pics[i], 0, pics[i].Length);
-
-                        tmpData.Add(((MemoryStream)writer.BaseStream).ToArray());
+                        tmpData.Add(((MemoryStream)dst.BaseStream).ToArray());
                     }
 
                     return true;
