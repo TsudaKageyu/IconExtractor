@@ -11,7 +11,7 @@ namespace SampleApp
     {
         private class IconListViewItem : ListViewItem
         {
-            public Icon Icon { get; set; }
+            public Bitmap Bitmap { get; set; }
         }
 
         public Form1()
@@ -22,7 +22,7 @@ namespace SampleApp
         private void ClearAllIcons()
         {
             foreach (var item in lvwIcons.Items)
-                ((IconListViewItem)item).Icon.Dispose();
+                ((IconListViewItem)item).Bitmap.Dispose();
 
             lvwIcons.Items.Clear();
         }
@@ -77,7 +77,8 @@ namespace SampleApp
                     var item = new IconListViewItem();
                     item.ToolTipText = String.Format(
                         "{0}x{1}, {2}bits", i.Width, i.Height, IconUtil.GetBitCount(i));
-                    item.Icon = i;
+                    item.Bitmap = IconUtil.ToBitmap(i);
+                    i.Dispose();
 
                     lvwIcons.Items.Add(item);
                 }
@@ -95,31 +96,19 @@ namespace SampleApp
 
             e.DrawBackground();
 
-            int w, h;
-            if (item.Icon.Width <= 128 && item.Icon.Height <= 128)
-            {
-                w = item.Icon.Width;
-                h = item.Icon.Height;
-            }
-            else
-            {
-                w = 128;
-                h = 128;
-            }
+            int w = Math.Min(128, item.Bitmap.Width);
+            int h = Math.Min(128, item.Bitmap.Height);
 
             int x = e.Bounds.X + (e.Bounds.Width - w) / 2;
             int y = e.Bounds.Y + (e.Bounds.Height - h) / 2;
             var dstRect = new Rectangle(x, y, w, h);
-            var srcRect = new Rectangle(Point.Empty, item.Icon.Size);
+            var srcRect = new Rectangle(Point.Empty, item.Bitmap.Size);
 
             e.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
             e.Graphics.CompositingQuality = CompositingQuality.HighQuality;
             e.Graphics.Clip = new Region(e.Bounds);
 
-            using (var bmp = IconUtil.ToBitmap(item.Icon))
-            {
-                e.Graphics.DrawImage(bmp, dstRect, srcRect, GraphicsUnit.Pixel);
-            }
+            e.Graphics.DrawImage(item.Bitmap, dstRect, srcRect, GraphicsUnit.Pixel);
 
             var textRect = new Rectangle(
                 e.Bounds.Left, e.Bounds.Bottom - Font.Height - 4,
