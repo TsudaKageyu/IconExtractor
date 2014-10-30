@@ -29,11 +29,33 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
+using System.Reflection.Emit;
 
 namespace TsudaKageyu
 {
     public static class IconUtil
     {
+        private delegate byte[] GetIconDataDelegate(Icon icon);
+
+        static GetIconDataDelegate getIconData;
+
+        static IconUtil()
+        {
+            // Create a dynamic method to access Icon.iconData private field.
+
+            var dm = new DynamicMethod(
+                "GetIconData", typeof(byte[]), new Type[] { typeof(Icon) }, typeof(Icon));
+            var fi = typeof(Icon).GetField(
+                "iconData", BindingFlags.Instance | BindingFlags.NonPublic);
+            var gen = dm.GetILGenerator();
+            gen.Emit(OpCodes.Ldarg_0);
+            gen.Emit(OpCodes.Ldfld, fi);
+            gen.Emit(OpCodes.Ret);
+
+            getIconData = (GetIconDataDelegate)dm.CreateDelegate(typeof(GetIconDataDelegate));
+        }
+
         /// <summary>
         /// Split an Icon consists of multiple icons into an array of Icon each
         /// consists of single icons.
@@ -120,7 +142,7 @@ namespace TsudaKageyu
 
             int count = BitConverter.ToInt16(data, 4);
             int bitDepth = 0;
-            for (int i =0; i < count; ++i)
+            for (int i = 0; i < count; ++i)
             {
                 int depth = BitConverter.ToUInt16(data, 6 + 16 * i + 6);    // ICONDIRENTRY.wBitCount
                 if (depth > bitDepth)
@@ -132,10 +154,18 @@ namespace TsudaKageyu
 
         private static byte[] GetIconData(Icon icon)
         {
-            using (var ms = new MemoryStream())
+            var data = getIconData(icon);
+            if (data != null)
             {
-                icon.Save(ms);
-                return ms.ToArray();
+                return data;
+            }
+            else
+            {
+                using (var ms = new MemoryStream())
+                {
+                    icon.Save(ms);
+                    return ms.ToArray();
+                }
             }
         }
     }
