@@ -162,20 +162,22 @@ namespace TsudaKageyu
 
                         for (int i = 0; i < count; ++i)
                         {
-                            // Copy GRPICONDIRENTRY to ICONDIRENTRY.
-
-                            dst.Seek(6 + 16 * i, SeekOrigin.Begin);
-
-                            dst.Write(dir, 6 + 14 * i, 12);  // First 12bytes are identical.
-                            dst.Write(picOffset);               // Write offset instead of ID.
-
-                            // Copy a picture.
-
-                            dst.Seek(picOffset, SeekOrigin.Begin);
+                            // Load the picture.
 
                             ushort id = BitConverter.ToUInt16(dir, 6 + 14 * i + 12);    // GRPICONDIRENTRY.nID
                             var pic = GetDataFromResource(hModule, RT_ICON, (IntPtr)id);
 
+                            // Copy GRPICONDIRENTRY to ICONDIRENTRY.
+
+                            dst.Seek(6 + 16 * i, SeekOrigin.Begin);
+
+                            dst.Write(dir, 6 + 14 * i, 8);  // First 8bytes are identical.
+                            dst.Write(pic.Length);          // ICONDIRENTRY.dwBytesInRes
+                            dst.Write(picOffset);           // ICONDIRENTRY.dwImageOffset
+
+                            // Copy a picture.
+
+                            dst.Seek(picOffset, SeekOrigin.Begin);
                             dst.Write(pic, 0, pic.Length);
 
                             picOffset += pic.Length;
