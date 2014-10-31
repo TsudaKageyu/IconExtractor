@@ -40,8 +40,6 @@ namespace SampleApp
                 var fileName = iconPickerDialog.FileName;
                 var index = iconPickerDialog.IconIndex;
 
-                txtFileName.Text = String.Format("{0}, {1}", fileName, index);
-
                 Icon icon = null;
                 Icon[] splitIcons = null;
                 try
@@ -64,6 +62,8 @@ namespace SampleApp
                     return;
                 }
 
+                txtFileName.Text = String.Format("{0}, #{1}, {2} variations", fileName, index, splitIcons.Length);
+
                 // Update icons.
 
                 Icon = icon;
@@ -77,7 +77,7 @@ namespace SampleApp
                     var item = new IconListViewItem();
                     var size = i.Size;
                     var bits = IconUtil.GetBitCount(i);
-                    item.ToolTipText = String.Format("{0}x{1}, {2}bits", size.Width, size.Height, bits);
+                    item.ToolTipText = String.Format("{0}x{1}, {2} bits", size.Width, size.Height, bits);
                     item.Bitmap = IconUtil.ToBitmap(i);
                     i.Dispose();
 
