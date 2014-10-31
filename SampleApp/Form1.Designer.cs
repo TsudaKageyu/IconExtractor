@@ -60,6 +60,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvwIcons.Location = new System.Drawing.Point(12, 37);
+            this.lvwIcons.MultiSelect = false;
             this.lvwIcons.Name = "lvwIcons";
             this.lvwIcons.OwnerDraw = true;
             this.lvwIcons.Size = new System.Drawing.Size(423, 396);

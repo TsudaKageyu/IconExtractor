@@ -95,7 +95,14 @@ namespace SampleApp
 
             // Draw item
 
-            e.DrawBackground();
+            e.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            e.Graphics.CompositingQuality = CompositingQuality.HighQuality;
+            e.Graphics.Clip = new Region(e.Bounds);
+
+            if (e.Item.Selected)
+                e.Graphics.FillRectangle(SystemBrushes.MenuHighlight, e.Bounds);
+            else
+                e.Graphics.FillRectangle(SystemBrushes.Window, e.Bounds);
 
             int w = Math.Min(128, item.Bitmap.Width);
             int h = Math.Min(128, item.Bitmap.Height);
@@ -105,9 +112,6 @@ namespace SampleApp
             var dstRect = new Rectangle(x, y, w, h);
             var srcRect = new Rectangle(Point.Empty, item.Bitmap.Size);
 
-            e.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            e.Graphics.CompositingQuality = CompositingQuality.HighQuality;
-            e.Graphics.Clip = new Region(e.Bounds);
 
             e.Graphics.DrawImage(item.Bitmap, dstRect, srcRect, GraphicsUnit.Pixel);
 
