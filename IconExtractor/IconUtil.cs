@@ -122,7 +122,10 @@ namespace TsudaKageyu
             using (var ms = new MemoryStream())
             {
                 icon.Save(ms);
-                return (Bitmap)Image.FromStream(ms);
+                using (var bmp = (Bitmap)Image.FromStream(ms))
+                {
+                    return new Bitmap(bmp);
+                }
             }
         }
 
