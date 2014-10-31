@@ -127,46 +127,6 @@ namespace TsudaKageyu
         }
 
         /// <summary>
-        /// Gets the size of an Icon.
-        /// </summary>
-        /// <param name="icon">An System.Drawing.Icon object.</param>
-        /// <returns>Size of the icon in pixel.</returns>
-        /// <remarks>
-        /// This method takes into account the PNG header.
-        /// If the icon has multiple variations, this method returns the size of 
-        /// the first variation.
-        /// </remarks>
-        public static Size GetSize(Icon icon)
-        {
-            if (icon == null)
-                throw new ArgumentNullException("icon");
-
-            // Get an .ico file in memory, then read the header.
-
-            var data = GetIconData(icon);
-            if (data.Length >= 51
-                && data[22] == 0x89 && data[23] == 0x50 && data[24] == 0x4e && data[25] == 0x47
-                && data[26] == 0x0d && data[27] == 0x0a && data[28] == 0x1a && data[29] == 0x0a
-                && data[30] == 0x00 && data[31] == 0x00 && data[32] == 0x00 && data[33] == 0x0d
-                && data[34] == 0x49 && data[35] == 0x48 && data[36] == 0x44 && data[37] == 0x52)
-            {
-                // The picture is PNG. Read IHDR chunk.
-
-                int w = (data[38] << 24) | (data[39] << 16) | (data[40] << 8) | data[41];
-                int h = (data[42] << 24) | (data[43] << 16) | (data[44] << 8) | data[45];
-                return new Size(w, h);
-            }
-            else if (data.Length >= 22)
-            {
-                // The picture is not PNG. Read ICONDIRENTRY structure.
-
-                return new Size(data[6], data[7]);
-            }
-
-            throw new ArgumentException("The icon is corrupt. Couldn't read the header.", "icon");
-        }
-
-        /// <summary>
         /// Gets the bit depth of an Icon.
         /// </summary>
         /// <param name="icon">An System.Drawing.Icon object.</param>

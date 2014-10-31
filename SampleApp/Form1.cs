@@ -75,7 +75,7 @@ namespace SampleApp
                 foreach (var i in splitIcons)
                 {
                     var item = new IconListViewItem();
-                    var size = IconUtil.GetSize(i);
+                    var size = i.Size;
                     var bits = IconUtil.GetBitCount(i);
                     item.ToolTipText = String.Format("{0}x{1}, {2}bits", size.Width, size.Height, bits);
                     item.Bitmap = IconUtil.ToBitmap(i);
