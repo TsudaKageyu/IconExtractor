@@ -67,7 +67,7 @@ namespace TsudaKageyu
             if (icon == null)
                 throw new ArgumentNullException("icon");
 
-            // Create an .ico file in memory, then split it into separate icons.
+            // Get an .ico file in memory, then split it into separate icons.
 
             var src = GetIconData(icon);
 
@@ -141,7 +141,7 @@ namespace TsudaKageyu
             if (icon == null)
                 throw new ArgumentNullException("icon");
 
-            // Create an .ico file in memory, then read the header.
+            // Get an .ico file in memory, then read the header.
 
             var data = GetIconData(icon);
             if (data.Length >= 51
@@ -163,7 +163,7 @@ namespace TsudaKageyu
                 return new Size(data[6], data[7]);
             }
 
-            throw new ArgumentException("Corrupt icon.");
+            throw new ArgumentException("The icon is corrupt. Couldn't read the header.", "icon");
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace TsudaKageyu
             if (icon == null)
                 throw new ArgumentNullException("icon");
 
-            // Create an .ico file in memory, then read the header.
+            // Get an .ico file in memory, then read the header.
 
             var data = GetIconData(icon);
             if (data.Length >= 51
@@ -216,7 +216,7 @@ namespace TsudaKageyu
                 return BitConverter.ToUInt16(data, 12);
             }
 
-            throw new ArgumentException("Corrupt icon.");
+            throw new ArgumentException("The icon is corrupt. Couldn't read the header.", "icon");
         }
 
         private static byte[] GetIconData(Icon icon)
