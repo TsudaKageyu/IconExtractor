@@ -118,6 +118,23 @@ namespace TsudaKageyu
             return icons.ToArray();
         }
 
+        /// <summary>
+        /// Save an icon to the specified output Stream.
+        /// </summary>
+        /// <param name="index">Zero based index of the icon to be saved.</param>
+        /// <param name="outputStream">The Stream to save to.</param>
+        public void Save(int index, Stream outputStream)
+        {
+            if (index < 0 || Count <= index)
+                throw new ArgumentOutOfRangeException("index");
+
+            if (outputStream == null)
+                throw new ArgumentNullException("outputStream");
+
+            var data = iconData[index];
+            outputStream.Write(data, 0, data.Length);
+        }
+
         private void Initialize(string fileName)
         {
             if (fileName == null)
