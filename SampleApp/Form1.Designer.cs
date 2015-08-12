@@ -31,6 +31,8 @@
             this.txtFileName = new System.Windows.Forms.TextBox();
             this.btnSelectIcon = new System.Windows.Forms.Button();
             this.lvwIcons = new System.Windows.Forms.ListView();
+            this.btnSaveAsIco = new System.Windows.Forms.Button();
+            this.saveIcoDialog = new System.Windows.Forms.SaveFileDialog();
             this.iconPickerDialog = new SampleApp.IconPickerDialog();
             this.SuspendLayout();
             // 
@@ -63,18 +65,33 @@
             this.lvwIcons.MultiSelect = false;
             this.lvwIcons.Name = "lvwIcons";
             this.lvwIcons.OwnerDraw = true;
-            this.lvwIcons.Size = new System.Drawing.Size(423, 396);
+            this.lvwIcons.Size = new System.Drawing.Size(423, 367);
             this.lvwIcons.TabIndex = 2;
             this.lvwIcons.TileSize = new System.Drawing.Size(132, 130);
             this.lvwIcons.UseCompatibleStateImageBehavior = false;
             this.lvwIcons.View = System.Windows.Forms.View.Tile;
             this.lvwIcons.DrawItem += new System.Windows.Forms.DrawListViewItemEventHandler(this.lvwIcons_DrawItem);
             // 
+            // btnSaveAsIco
+            // 
+            this.btnSaveAsIco.Location = new System.Drawing.Point(12, 410);
+            this.btnSaveAsIco.Name = "btnSaveAsIco";
+            this.btnSaveAsIco.Size = new System.Drawing.Size(155, 23);
+            this.btnSaveAsIco.TabIndex = 3;
+            this.btnSaveAsIco.Text = "Save as Single .ico...";
+            this.btnSaveAsIco.UseVisualStyleBackColor = true;
+            this.btnSaveAsIco.Click += new System.EventHandler(this.btnSaveAsIco_Click);
+            // 
+            // saveIcoDialog
+            // 
+            this.saveIcoDialog.Filter = "Icon files|*.ico";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(447, 445);
+            this.Controls.Add(this.btnSaveAsIco);
             this.Controls.Add(this.lvwIcons);
             this.Controls.Add(this.btnSelectIcon);
             this.Controls.Add(this.txtFileName);
@@ -92,6 +109,8 @@
         private System.Windows.Forms.TextBox txtFileName;
         private System.Windows.Forms.Button btnSelectIcon;
         private System.Windows.Forms.ListView lvwIcons;
+        private System.Windows.Forms.Button btnSaveAsIco;
+        private System.Windows.Forms.SaveFileDialog saveIcoDialog;
     }
 }
 

@@ -14,6 +14,9 @@ namespace SampleApp
             public Bitmap Bitmap { get; set; }
         }
 
+        IconExtractor m_iconExtractor = null;
+        int m_iconIndex = 0;
+
         public Form1()
         {
             InitializeComponent();
@@ -38,7 +41,7 @@ namespace SampleApp
             if (result == DialogResult.OK)
             {
                 var fileName = iconPickerDialog.FileName;
-                var index = iconPickerDialog.IconIndex;
+                m_iconIndex = iconPickerDialog.IconIndex;
 
                 Icon icon = null;
                 Icon[] splitIcons = null;
@@ -46,12 +49,13 @@ namespace SampleApp
                 {
                     if (Path.GetExtension(iconPickerDialog.FileName).ToLower() == ".ico")
                     {
+                        m_iconExtractor = null;
                         icon = new Icon(iconPickerDialog.FileName);
                     }
                     else
                     {
-                        var extractor = new IconExtractor(fileName);
-                        icon = extractor.GetIcon(index);
+                        m_iconExtractor = new IconExtractor(fileName);
+                        icon = m_iconExtractor.GetIcon(m_iconIndex);
                     }
 
                     splitIcons = IconUtil.Split(icon);
@@ -62,7 +66,8 @@ namespace SampleApp
                     return;
                 }
 
-                txtFileName.Text = String.Format("{0}, #{1}, {2} variations", fileName, index, splitIcons.Length);
+                txtFileName.Text = String.Format(
+                    "{0}, #{1}, {2} variations", fileName, m_iconIndex, splitIcons.Length);
 
                 // Update icons.
 
@@ -86,6 +91,19 @@ namespace SampleApp
 
                 lvwIcons.EndUpdate();
 
+                btnSaveAsIco.Enabled = (m_iconExtractor != null);
+            }
+        }
+
+        private void btnSaveAsIco_Click(object sender, EventArgs e)
+        {
+            var result = saveIcoDialog.ShowDialog(this);
+            if (result == DialogResult.OK)
+            {
+                using (var fs = File.OpenWrite(saveIcoDialog.FileName))
+                {
+                    m_iconExtractor.Save(m_iconIndex, fs);
+                }
             }
         }
 
