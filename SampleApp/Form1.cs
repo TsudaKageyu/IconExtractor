@@ -12,6 +12,7 @@ namespace SampleApp
         private class IconListViewItem : ListViewItem
         {
             public Bitmap Bitmap { get; set; }
+            public int BitCount { get; set; }
         }
 
         IconExtractor m_iconExtractor = null;
@@ -81,9 +82,9 @@ namespace SampleApp
                 {
                     var item = new IconListViewItem();
                     var size = i.Size;
-                    var bits = IconUtil.GetBitCount(i);
-                    item.ToolTipText = String.Format("{0}x{1}, {2} bits", size.Width, size.Height, bits);
+                    item.BitCount = IconUtil.GetBitCount(i);
                     item.Bitmap = IconUtil.ToBitmap(i);
+                    item.ToolTipText = String.Format("{0}x{1}, {2} bits", size.Width, size.Height, item.BitCount);
                     i.Dispose();
 
                     lvwIcons.Items.Add(item);
@@ -103,6 +104,25 @@ namespace SampleApp
                 using (var fs = File.OpenWrite(saveIcoDialog.FileName))
                 {
                     m_iconExtractor.Save(m_iconIndex, fs);
+                }
+            }
+        }
+
+        private void btnSaveAsPng_Click(object sender, EventArgs e)
+        {
+            var result = folderBrowserDialog.ShowDialog(this);
+            if (result == DialogResult.OK)
+            {
+                int count = lvwIcons.Items.Count;
+                for (int i = 0; i < count; ++i)
+                {
+                    var item = (IconListViewItem)lvwIcons.Items[i];
+                    var fileName = String.Format(
+                        "{0}x{1}, {2} bits.png", item.Bitmap.Width, item.Bitmap.Height, item.BitCount);
+
+                    fileName = Path.Combine(folderBrowserDialog.SelectedPath, fileName);
+
+                    item.Bitmap.Save(fileName);
                 }
             }
         }
