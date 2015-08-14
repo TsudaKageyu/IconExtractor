@@ -96,7 +96,7 @@ namespace TsudaKageyu
             if (index < 0 || Count <= index)
                 throw new ArgumentOutOfRangeException("index");
 
-            // Create an Icon based on a .ico file in memory.
+            // Create an Icon from the .ico file in memory.
 
             using (var ms = new MemoryStream(iconData[index]))
             {
