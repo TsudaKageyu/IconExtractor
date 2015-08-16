@@ -36,6 +36,13 @@ int iconCount = ie.Count;
 Icon icon0 = ie.GetIcon(0);
 Icon icon1 = ie.GetIcon(1);
 
+// Save icons individually.
+
+using (var fs = File.OpenWrite(@"D:\sample0.ico"))
+{
+    ie.Save(0, fs);
+}
+
 // Extract all the icons in one go.
 
 Icon[] allIcons = ie.GetAllIcons();
