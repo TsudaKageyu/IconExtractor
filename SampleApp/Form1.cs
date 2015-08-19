@@ -96,6 +96,14 @@ namespace SampleApp
             }
         }
 
+        private void cbShowChecker_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbShowChecker.Checked)
+                lvwIcons.BackgroundImage = Properties.Resources.Checker;
+            else
+                lvwIcons.BackgroundImage = null;
+        }
+
         private void btnSaveAsIco_Click(object sender, EventArgs e)
         {
             var result = saveIcoDialog.ShowDialog(this);
@@ -139,8 +147,6 @@ namespace SampleApp
 
             if (e.Item.Selected)
                 e.Graphics.FillRectangle(SystemBrushes.MenuHighlight, e.Bounds);
-            else
-                e.Graphics.FillRectangle(SystemBrushes.Window, e.Bounds);
 
             int w = Math.Min(128, item.Bitmap.Width);
             int h = Math.Min(128, item.Bitmap.Height);
@@ -149,7 +155,6 @@ namespace SampleApp
             int y = e.Bounds.Y + (e.Bounds.Height - h) / 2;
             var dstRect = new Rectangle(x, y, w, h);
             var srcRect = new Rectangle(Point.Empty, item.Bitmap.Size);
-
 
             e.Graphics.DrawImage(item.Bitmap, dstRect, srcRect, GraphicsUnit.Pixel);
 
@@ -160,6 +165,14 @@ namespace SampleApp
 
             e.Graphics.Clip = new Region();
             e.Graphics.DrawRectangle(SystemPens.ControlLight, e.Bounds);
+        }
+    }
+
+    class MyListView : ListView
+    {
+        public MyListView() : base()
+        {
+            DoubleBuffered = true;
         }
     }
 }
