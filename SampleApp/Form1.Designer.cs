@@ -45,7 +45,7 @@
             this.txtFileName.Location = new System.Drawing.Point(110, 12);
             this.txtFileName.Name = "txtFileName";
             this.txtFileName.ReadOnly = true;
-            this.txtFileName.Size = new System.Drawing.Size(325, 19);
+            this.txtFileName.Size = new System.Drawing.Size(370, 19);
             this.txtFileName.TabIndex = 1;
             // 
             // btnSelectIcon
@@ -67,7 +67,7 @@
             this.lvwIcons.MultiSelect = false;
             this.lvwIcons.Name = "lvwIcons";
             this.lvwIcons.OwnerDraw = true;
-            this.lvwIcons.Size = new System.Drawing.Size(423, 367);
+            this.lvwIcons.Size = new System.Drawing.Size(468, 291);
             this.lvwIcons.TabIndex = 2;
             this.lvwIcons.TileSize = new System.Drawing.Size(132, 130);
             this.lvwIcons.UseCompatibleStateImageBehavior = false;
@@ -76,7 +76,8 @@
             // 
             // btnSaveAsIco
             // 
-            this.btnSaveAsIco.Location = new System.Drawing.Point(119, 410);
+            this.btnSaveAsIco.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSaveAsIco.Location = new System.Drawing.Point(164, 334);
             this.btnSaveAsIco.Name = "btnSaveAsIco";
             this.btnSaveAsIco.Size = new System.Drawing.Size(155, 23);
             this.btnSaveAsIco.TabIndex = 3;
@@ -90,7 +91,8 @@
             // 
             // btnSaveAsPng
             // 
-            this.btnSaveAsPng.Location = new System.Drawing.Point(280, 410);
+            this.btnSaveAsPng.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSaveAsPng.Location = new System.Drawing.Point(325, 334);
             this.btnSaveAsPng.Name = "btnSaveAsPng";
             this.btnSaveAsPng.Size = new System.Drawing.Size(155, 23);
             this.btnSaveAsPng.TabIndex = 4;
@@ -102,12 +104,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(447, 445);
+            this.ClientSize = new System.Drawing.Size(492, 369);
             this.Controls.Add(this.btnSaveAsPng);
             this.Controls.Add(this.btnSaveAsIco);
             this.Controls.Add(this.lvwIcons);
             this.Controls.Add(this.btnSelectIcon);
             this.Controls.Add(this.txtFileName);
+            this.MinimumSize = new System.Drawing.Size(500, 400);
             this.Name = "Form1";
             this.Text = "IconExtractor Sample App";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
