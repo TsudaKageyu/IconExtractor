@@ -38,19 +38,19 @@
             this.cbShowChecker = new System.Windows.Forms.CheckBox();
             this.iconPickerDialog = new SampleApp.IconPickerDialog();
             this.SuspendLayout();
-            //
+            // 
             // txtFileName
-            //
-            this.txtFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.txtFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFileName.Location = new System.Drawing.Point(110, 12);
             this.txtFileName.Name = "txtFileName";
             this.txtFileName.ReadOnly = true;
             this.txtFileName.Size = new System.Drawing.Size(370, 19);
             this.txtFileName.TabIndex = 1;
-            //
+            // 
             // btnSelectIcon
-            //
+            // 
             this.btnSelectIcon.Location = new System.Drawing.Point(12, 12);
             this.btnSelectIcon.Name = "btnSelectIcon";
             this.btnSelectIcon.Size = new System.Drawing.Size(92, 19);
@@ -58,26 +58,24 @@
             this.btnSelectIcon.Text = "Select Icon...";
             this.btnSelectIcon.UseVisualStyleBackColor = true;
             this.btnSelectIcon.Click += new System.EventHandler(this.btnPickFile_Click);
-            //
+            // 
             // lvwIcons
-            //
-            this.lvwIcons.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.lvwIcons.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvwIcons.BackgroundImageTiled = true;
             this.lvwIcons.Location = new System.Drawing.Point(12, 37);
             this.lvwIcons.MultiSelect = false;
             this.lvwIcons.Name = "lvwIcons";
-            this.lvwIcons.OwnerDraw = true;
             this.lvwIcons.Size = new System.Drawing.Size(468, 291);
             this.lvwIcons.TabIndex = 2;
             this.lvwIcons.TileSize = new System.Drawing.Size(132, 130);
             this.lvwIcons.UseCompatibleStateImageBehavior = false;
             this.lvwIcons.View = System.Windows.Forms.View.Tile;
-            this.lvwIcons.DrawItem += new System.Windows.Forms.DrawListViewItemEventHandler(this.lvwIcons_DrawItem);
-            //
+            // 
             // btnSaveAsIco
-            //
+            // 
             this.btnSaveAsIco.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSaveAsIco.Location = new System.Drawing.Point(164, 334);
             this.btnSaveAsIco.Name = "btnSaveAsIco";
@@ -86,13 +84,13 @@
             this.btnSaveAsIco.Text = "Save as Single .ico...";
             this.btnSaveAsIco.UseVisualStyleBackColor = true;
             this.btnSaveAsIco.Click += new System.EventHandler(this.btnSaveAsIco_Click);
-            //
+            // 
             // saveIcoDialog
-            //
+            // 
             this.saveIcoDialog.Filter = "Icon files|*.ico";
-            //
+            // 
             // btnSaveAsPng
-            //
+            // 
             this.btnSaveAsPng.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSaveAsPng.Location = new System.Drawing.Point(325, 334);
             this.btnSaveAsPng.Name = "btnSaveAsPng";
@@ -101,9 +99,9 @@
             this.btnSaveAsPng.Text = "Save as Multiple .png...";
             this.btnSaveAsPng.UseVisualStyleBackColor = true;
             this.btnSaveAsPng.Click += new System.EventHandler(this.btnSaveAsPng_Click);
-            //
+            // 
             // cbShowChecker
-            //
+            // 
             this.cbShowChecker.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cbShowChecker.AutoSize = true;
             this.cbShowChecker.Location = new System.Drawing.Point(12, 338);
@@ -113,9 +111,9 @@
             this.cbShowChecker.Text = "Show Checker";
             this.cbShowChecker.UseVisualStyleBackColor = true;
             this.cbShowChecker.CheckedChanged += new System.EventHandler(this.cbShowChecker_CheckedChanged);
-            //
+            // 
             // Form1
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(492, 369);
