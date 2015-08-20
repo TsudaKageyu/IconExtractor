@@ -30,26 +30,27 @@
         {
             this.txtFileName = new System.Windows.Forms.TextBox();
             this.btnSelectIcon = new System.Windows.Forms.Button();
-            this.lvwIcons = new System.Windows.Forms.ListView();
+            this.lvwIcons = new SampleApp.MyListView();
             this.btnSaveAsIco = new System.Windows.Forms.Button();
             this.saveIcoDialog = new System.Windows.Forms.SaveFileDialog();
             this.btnSaveAsPng = new System.Windows.Forms.Button();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.cbShowChecker = new System.Windows.Forms.CheckBox();
             this.iconPickerDialog = new SampleApp.IconPickerDialog();
             this.SuspendLayout();
-            // 
+            //
             // txtFileName
-            // 
-            this.txtFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.txtFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFileName.Location = new System.Drawing.Point(110, 12);
             this.txtFileName.Name = "txtFileName";
             this.txtFileName.ReadOnly = true;
             this.txtFileName.Size = new System.Drawing.Size(370, 19);
             this.txtFileName.TabIndex = 1;
-            // 
+            //
             // btnSelectIcon
-            // 
+            //
             this.btnSelectIcon.Location = new System.Drawing.Point(12, 12);
             this.btnSelectIcon.Name = "btnSelectIcon";
             this.btnSelectIcon.Size = new System.Drawing.Size(92, 19);
@@ -57,12 +58,13 @@
             this.btnSelectIcon.Text = "Select Icon...";
             this.btnSelectIcon.UseVisualStyleBackColor = true;
             this.btnSelectIcon.Click += new System.EventHandler(this.btnPickFile_Click);
-            // 
+            //
             // lvwIcons
-            // 
-            this.lvwIcons.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.lvwIcons.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvwIcons.BackgroundImageTiled = true;
             this.lvwIcons.Location = new System.Drawing.Point(12, 37);
             this.lvwIcons.MultiSelect = false;
             this.lvwIcons.Name = "lvwIcons";
@@ -73,38 +75,51 @@
             this.lvwIcons.UseCompatibleStateImageBehavior = false;
             this.lvwIcons.View = System.Windows.Forms.View.Tile;
             this.lvwIcons.DrawItem += new System.Windows.Forms.DrawListViewItemEventHandler(this.lvwIcons_DrawItem);
-            // 
+            //
             // btnSaveAsIco
-            // 
+            //
             this.btnSaveAsIco.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSaveAsIco.Location = new System.Drawing.Point(164, 334);
             this.btnSaveAsIco.Name = "btnSaveAsIco";
             this.btnSaveAsIco.Size = new System.Drawing.Size(155, 23);
-            this.btnSaveAsIco.TabIndex = 3;
+            this.btnSaveAsIco.TabIndex = 4;
             this.btnSaveAsIco.Text = "Save as Single .ico...";
             this.btnSaveAsIco.UseVisualStyleBackColor = true;
             this.btnSaveAsIco.Click += new System.EventHandler(this.btnSaveAsIco_Click);
-            // 
+            //
             // saveIcoDialog
-            // 
+            //
             this.saveIcoDialog.Filter = "Icon files|*.ico";
-            // 
+            //
             // btnSaveAsPng
-            // 
+            //
             this.btnSaveAsPng.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSaveAsPng.Location = new System.Drawing.Point(325, 334);
             this.btnSaveAsPng.Name = "btnSaveAsPng";
             this.btnSaveAsPng.Size = new System.Drawing.Size(155, 23);
-            this.btnSaveAsPng.TabIndex = 4;
+            this.btnSaveAsPng.TabIndex = 5;
             this.btnSaveAsPng.Text = "Save as Multiple .png...";
             this.btnSaveAsPng.UseVisualStyleBackColor = true;
             this.btnSaveAsPng.Click += new System.EventHandler(this.btnSaveAsPng_Click);
-            // 
+            //
+            // cbShowChecker
+            //
+            this.cbShowChecker.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.cbShowChecker.AutoSize = true;
+            this.cbShowChecker.Location = new System.Drawing.Point(12, 338);
+            this.cbShowChecker.Name = "cbShowChecker";
+            this.cbShowChecker.Size = new System.Drawing.Size(97, 16);
+            this.cbShowChecker.TabIndex = 3;
+            this.cbShowChecker.Text = "Show Checker";
+            this.cbShowChecker.UseVisualStyleBackColor = true;
+            this.cbShowChecker.CheckedChanged += new System.EventHandler(this.cbShowChecker_CheckedChanged);
+            //
             // Form1
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(492, 369);
+            this.Controls.Add(this.cbShowChecker);
             this.Controls.Add(this.btnSaveAsPng);
             this.Controls.Add(this.btnSaveAsIco);
             this.Controls.Add(this.lvwIcons);
@@ -124,11 +139,12 @@
         private IconPickerDialog iconPickerDialog;
         private System.Windows.Forms.TextBox txtFileName;
         private System.Windows.Forms.Button btnSelectIcon;
-        private System.Windows.Forms.ListView lvwIcons;
+        private SampleApp.MyListView lvwIcons;
         private System.Windows.Forms.Button btnSaveAsIco;
         private System.Windows.Forms.SaveFileDialog saveIcoDialog;
         private System.Windows.Forms.Button btnSaveAsPng;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
+        private System.Windows.Forms.CheckBox cbShowChecker;
     }
 }
 
