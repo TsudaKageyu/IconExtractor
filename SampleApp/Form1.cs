@@ -9,12 +9,6 @@ namespace SampleApp
 {
     public partial class Form1 : Form
     {
-        private class IconListViewItem : ListViewItem
-        {
-            public Bitmap Bitmap { get; set; }
-            public int BitCount { get; set; }
-        }
-
         IconExtractor m_iconExtractor = null;
         int m_iconIndex = 0;
 
@@ -165,14 +159,6 @@ namespace SampleApp
 
             e.Graphics.Clip = new Region();
             e.Graphics.DrawRectangle(SystemPens.ControlLight, e.Bounds);
-        }
-    }
-
-    class MyListView : ListView
-    {
-        public MyListView() : base()
-        {
-            DoubleBuffered = true;
         }
     }
 }

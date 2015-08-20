@@ -30,7 +30,7 @@
         {
             this.txtFileName = new System.Windows.Forms.TextBox();
             this.btnSelectIcon = new System.Windows.Forms.Button();
-            this.lvwIcons = new SampleApp.MyListView();
+            this.lvwIcons = new SampleApp.IconListView();
             this.btnSaveAsIco = new System.Windows.Forms.Button();
             this.saveIcoDialog = new System.Windows.Forms.SaveFileDialog();
             this.btnSaveAsPng = new System.Windows.Forms.Button();
@@ -139,7 +139,7 @@
         private IconPickerDialog iconPickerDialog;
         private System.Windows.Forms.TextBox txtFileName;
         private System.Windows.Forms.Button btnSelectIcon;
-        private SampleApp.MyListView lvwIcons;
+        private SampleApp.IconListView lvwIcons;
         private System.Windows.Forms.Button btnSaveAsIco;
         private System.Windows.Forms.SaveFileDialog saveIcoDialog;
         private System.Windows.Forms.Button btnSaveAsPng;
