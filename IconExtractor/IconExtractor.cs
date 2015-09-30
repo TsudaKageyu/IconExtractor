@@ -155,7 +155,7 @@ namespace TsudaKageyu
 
                 ENUMRESNAMEPROC callback = (h, t, name, l) =>
                 {
-                    // Refer the following URL for the data structures used here:
+                    // Refer to the following URL for the data structures used here:
                     // http://msdn.microsoft.com/en-us/library/ms997538.aspx
 
                     // RT_GROUP_ICON resource consists of a GRPICONDIR and GRPICONDIRENTRY's.
